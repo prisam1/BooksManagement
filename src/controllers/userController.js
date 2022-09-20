@@ -1,8 +1,5 @@
 const userModel=require('../models/userModel.js')
 const Validator = require("../validation/validfun")
-
-
-const userModel = require('../model/userModel')
 const JWT = require("jsonwebtoken");
 
 const isValid = function (value) {
@@ -25,14 +22,14 @@ const createUser = async function (req, res) {
 
         
         if (!isValid(name)) { return res.status(400).send({ status: false, message: "name is required" }) }
-        let fname = /^[a-zA-Z]{2,20}$/.test(name.trim())
+        let fname = /^[a-zA-Z ]{2,20}$/.test(name.trim())
         if (!fname) return res.status(400).send({ status: false, message: "enter valid first name" })
 
        
         if (!isValid(phone)) { return res.status(400).send({ status: false, message: "mobile number is required"})}
         let mobile = /^((\+91)?|91)?[6789][0-9]{9}$/.test(phone.trim())
         if (!mobile) return res.status(400).send({ status: false, message: "enter valid phone number" })
-        let fphone = await userModel.find({ phone: phone })
+        let fphone = await userModel.findOne({ phone: phone })
         if (fphone)
         {return res.status(400).send({ status: false, message: "Mobile number is aleardy Exist" })
         }
@@ -40,18 +37,19 @@ const createUser = async function (req, res) {
         if (!isValid(email)) { return res.status(400).send({ status: false, message: "email is required" }) }
         let mail1 = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email.trim())
         if (!mail1) return res.status(400).send({ status: false, message: "enter valid mail" })
-        let femail = await userModel.find({ email: email })
+        let femail = await userModel.findOne({ email: email })
 
         if (femail) return res.status(400).send({ status: false, message: "Email is aleardy Exist" })
 
        
         if (!isValid(password)) { return res.status(400).send({ status: false, message: "password is required" }) }
-        let pass = /^[a-zA-Z0-9]{8,15}$/.test(password.trim())
+        let pass = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%&])[a-zA-Z0-9@#$%&]{8,15}$/.test(password.trim())
         if (!pass) return res.status(400).send({ status: false, message: "enter valid password" })
          
        
         if (data.hasOwnProperty("address")) {
-            if(typeof address!==Object){return res.status(400).send({status:false, message:"address should be in object"})}
+            // console.log(typeof address)
+            if(typeof address!=="object"||Array.isArray(address)){return res.status(400).send({status:false, message:"address should be in object"})}
          
             let street = address.street
             if (!isValid(street)) { return res.status(400).send({ status: false, message: "street is required" }) }
@@ -63,7 +61,7 @@ const createUser = async function (req, res) {
             let city = address.city
             if (!isValid(city)) { return res.status(400).send({ status: false, message: "city is required and it must be string" }) }
 
-            let city1 = /^[a-zA-Z]{2,20}$/.test(name.trim())
+            let city1 = /^[a-zA-Z]{2,20}$/.test(city.trim())
             if (!city1) return res.status(400).send({ status: false, message: "enter valid city name" })
 
             let pincode = address.pincode
@@ -71,7 +69,6 @@ const createUser = async function (req, res) {
 
             let pin = /^[1-9][0-9]{5}$/.test(pincode.trim())
             if (!pin) return res.status(400).send({ status: false, message: "enter valid pincode" })
-
 
         }
 
@@ -97,12 +94,14 @@ const login = async function (req, res) {
     if(!Validator.validPassword(password)){
         return res.status(400).send({ status: false, message: "Password is invalid" })
     }
-    let loginUser = userModel.findOne({ email: email, password:password })
+    let loginUser = await userModel.findOne({ email: email, password:password })
+    console.log(loginUser)
     if (!loginUser) {
         return res.status(401).send({ status: false, message: "Login failed due to incorrect password or email" })
     }
-   let token = jwt.sign({
-        userId: loginUser["_id"].toString()
+    
+   let token = JWT.sign({
+        userId: loginUser._id.toString()
     }, "This is our Secret", {
         expiresIn: '20s' // expires in 20 seconds
     });
@@ -114,22 +113,6 @@ catch(err){
 }
 }
 
-
-const createUser=async function(req,res){
-    try{
-        let body=req.body;
-        if(checkInputsPresent(body)){
-
-        }
-        
-
-
-    }
-    catch(err){
-
-
-    }
-
-}
+module.exports={createUser,login}
 
 

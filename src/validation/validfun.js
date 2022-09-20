@@ -27,7 +27,7 @@ const validateMobileNo = (number) => {
     
 }
 const validPassword=(password)=>{
-return (!/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%&])[a-zA-Z0-9@#$%&]{8,15}$/.test(password))
+return (/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%&])[a-zA-Z0-9@#$%&]{8,15}$/.test(password))
 }
 
 module.exports={checkInputsPresent,isValid,isValidTitle,validateMobileNo,validateEmail,validPassword}
