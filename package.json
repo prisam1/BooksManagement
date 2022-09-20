@@ -1,0 +1,19 @@
+{
+  "name": "project-booksmangement",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rahul-Singh-Dhek/Project-BooksMangement.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Rahul-Singh-Dhek/Project-BooksMangement/issues"
+  },
+  "homepage": "https://github.com/Rahul-Singh-Dhek/Project-BooksMangement#readme"
+}
