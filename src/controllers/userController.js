@@ -20,3 +20,22 @@ catch(err){
 }
 }
 
+
+const createUser=async function(req,res){
+    try{
+        let body=req.body;
+        if(checkInputsPresent(body)){
+            
+        }
+        
+
+
+    }
+    catch(err){
+
+
+    }
+
+}
+
+
