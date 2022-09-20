@@ -30,8 +30,8 @@ const createUser = async function (req, res) {
         let mobile = /^((\+91)?|91)?[6789][0-9]{9}$/.test(phone.trim())
         if (!mobile) return res.status(400).send({ status: false, message: "enter valid phone number" })
         let fphone = await userModel.findOne({ phone: phone })
-        if (fphone)
-        {return res.status(400).send({ status: false, message: "Mobile number is aleardy Exist" })
+        if (fphone){
+            return res.status(400).send({ status: false, message: "Mobile number is aleardy Exist" })
         }
         
         if (!isValid(email)) { return res.status(400).send({ status: false, message: "email is required" }) }
@@ -84,7 +84,7 @@ const login = async function (req, res) {
     try{
     
     let { email, password }=req.body
-    if (!Validator.checkInputsPresent(req.body)) return res.status(400).send({ status: false, message: "Data must be present" })
+    if (!Validator.checkInputsPresent(req.body)) return res.status(400).send({ status: false, message: "Please provide email and password" })
     if (!email) return res.status(400).send({ status: false, message: "EmailId is mandatory" })
     if(!Validator.validateEmail(email)){
         return res.status(400).send({ status: false, message: "EmailId is invalid" })
@@ -95,7 +95,7 @@ const login = async function (req, res) {
         return res.status(400).send({ status: false, message: "Password is invalid" })
     }
     let loginUser = await userModel.findOne({ email: email, password:password })
-    console.log(loginUser)
+    // console.log(loginUser)
     if (!loginUser) {
         return res.status(401).send({ status: false, message: "Login failed due to incorrect password or email" })
     }
