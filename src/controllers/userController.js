@@ -1,10 +1,16 @@
 const userModel=require('../models/userModel.js')
+const Validator = require("../validation/validfun")
 
-const login = function (req, res) {
+const login = async function (req, res) {
     try{
-    let body = req.body;
-    let data = userModel.findOne({ email: body.email, password: body.password })
-    if (!data) {
+    
+    let { email, password }=req.body
+    if (!Validator.checkInputsPresent(req.body)) return res.status(400).send({ status: false, message: "Data must be present" })
+    if (!email) return res.status(400).send({ status: false, message: "EmailId is mandatory" })
+    
+    if (!password) return res.status(400).send({ status: false, message: "Password is mandatory" })
+    let loginUser = userModel.findOne({ email: email, password:password })
+    if (!loginUser) {
         return res.status(401).send({ status: false, message: "Login failed due to incorrect password or email" })
     }
    let token = jwt.sign({
