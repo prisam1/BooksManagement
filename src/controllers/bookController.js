@@ -1,5 +1,6 @@
+
+const bookModel=require('../models/bookModel')
 const userModel = require('../models/userModel.js')
-const bookModel = require('../models/bookModel.js')
 const Validator = require("../validation/validfun")
 let mongoose = require("mongoose")
 let moment = require("moment")
@@ -125,8 +126,64 @@ const createBook = async function (req, res) {
     }
 }
 
+const getBookByQuery = async function (req, res) {
+    try {
+        let data = req.query;
+        let { userId, category, subcategory } = data
+        let bookData = { isDeleted: false }
+
+        if (Object.keys(data).length == 0) {
+           let getBooks = await bookModel.find(bookData).select({ _id: 1, title: 1, excerpt: 1, userId: 1, category: 1, reviews: 1, releasedAt: 1, }).sort({ title: 1 })
+            return res.status(200).send({ status: true, message: 'Books list', data: getBooks })
+        }
+
+        if (userId) {
+            let isValidId = mongoose.Types.ObjectId.isValid(userId)
+            if (!isValidId) return res.status(400).send({ status: false, message: "Enter valid user id" })
+            bookData.userId = userId
+        }
+        if (category) {
+            bookData.category = category
+        }
+        if (subcategory) {
+            bookData.subcategory = subcategory
+        }
+
+        let books = await bookModel.find(bookData).select({ _id: 1, title: 1, excerpt: 1, userId: 1, category: 1, subcategory: 1, reviews: 1, releasedAt: 1, }).sort({ title: 1 })
+
+        if (books.length == 0) return res.status(404).send({ status: false, message: "No data found" })
+        else return res.status(200).send({ status: true, message: 'Books list', data: books })
+
+    }
+    catch (err) {
+        res.status(500).send({ message: err.message })
+    }
+}
 
 
+const getBookById = async function (req, res) {
+    try {
+        let bookId = req.params.bookId;
+
+        var isValidId = mongoose.Types.ObjectId.isValid(bookId)
+        if (!isValidId) return res.status(400).send({ status: false, message: "Enter valid book id" })
+
+        let saveData = await bookModel.findById({ _id: bookId, isDeleted: false })
+        if (!saveData) { return res.status(404).send({ status: false, message: "book not found" }) }
 
 
-module.exports = { createBook }
+        // let data = await reviewModel.find({ bookId: bookId })
+
+        let book = saveData
+        // bookDetails = { ...book, reviewsData: data }
+
+        res.status(200).send({ ststus: true, message: "Book List", data: book })
+    } catch (err) {
+        res.status(500).send({ message: 'Error', error: err.message })
+    }
+}
+
+
+module.exports = { createBook,getBookByQuery, getBookById }
+
+

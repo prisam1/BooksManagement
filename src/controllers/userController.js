@@ -195,9 +195,6 @@ const createUser1 = async function (req, res) {
 }
 
 
-
-
-
 //--------------------------------------------------------------------------------------------------------------------------
 const login = async function (req, res) {
     try {
@@ -222,7 +219,7 @@ const login = async function (req, res) {
         let token = JWT.sign({
             userId: loginUser._id.toString()
         }, "This is our Secret", {
-            expiresIn: '20s' // expires in 20 seconds
+            expiresIn: '1hr' // expires in 20 seconds
         });
         return res.status(200).send({ status: true, message: "Success", data: { token: token } })
     }
