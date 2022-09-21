@@ -49,11 +49,11 @@ const getBookById = async function (req, res) {
         var isValidId = mongoose.Types.ObjectId.isValid(bookId)
         if (!isValidId) return res.status(400).send({ status: false, message: "Enter valid book id" })
 
-        let saveData = await booksModel.findById({ _id: bookId, isDeleted: false }).select({ __v: 0, deletedAt: 0 })
+        let saveData = await booksModel.findById({ _id: bookId, isDeleted: false })
         if (!saveData) { return res.status(404).send({ status: false, message: "book not found" }) }
 
 
-        let data = await reviewModel.find({ bookId: bookId }).select({ isDeleted: 0, __v: 0 })
+        let data = await reviewModel.find({ bookId: bookId })
 
         let book = saveData
         bookDetails = { ...book, reviewsData: data }
