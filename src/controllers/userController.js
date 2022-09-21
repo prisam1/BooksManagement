@@ -28,6 +28,7 @@ const createUser = async function (req, res) {
        
         if (!isValid(phone)) { return res.status(400).send({ status: false, message: "mobile number is required"})}
         let mobile = /^((\+91)?|91)?[6789][0-9]{9}$/.test(phone.trim())
+                
         if (!mobile) return res.status(400).send({ status: false, message: "enter valid phone number" })
         let fphone = await userModel.findOne({ phone: phone })
         if (fphone){
@@ -36,6 +37,8 @@ const createUser = async function (req, res) {
         
         if (!isValid(email)) { return res.status(400).send({ status: false, message: "email is required" }) }
         let mail1 = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email.trim())
+                   
+
         if (!mail1) return res.status(400).send({ status: false, message: "enter valid mail" })
         let femail = await userModel.findOne({ email: email })
 
