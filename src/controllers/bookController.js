@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 const bookModel=require('../models/bookModel')
 
 async function getBooks(req, res){
@@ -53,3 +54,7 @@ async function getBooks(req, res){
 }
 
 module.exports.getBooks = getBooks
+=======
+const userModel = require('../models/userModel.js')
+const Validator = require("../validation/validfun")
+>>>>>>> 86122714ee785a8b7195acfb8d3dc748a18d8ac0
