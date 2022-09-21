@@ -217,9 +217,9 @@ const login = async function (req, res) {
         }
 
         let token = JWT.sign({
-            userId: loginUser._id.toString()
+            userId: loginUser._id.toString(),
         }, "This is our Secret", {
-            expiresIn: '1hr' // expires in 20 seconds
+            expiresIn: '1h' // expires in 20 seconds
         });
         return res.status(200).send({ status: true, message: "Success", data: { token: token } })
     }

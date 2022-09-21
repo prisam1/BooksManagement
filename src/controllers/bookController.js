@@ -1,5 +1,5 @@
 
-const bookModel=require('../models/bookModel')
+const bookModel = require('../models/bookModel')
 const userModel = require('../models/userModel.js')
 const Validator = require("../validation/validfun")
 let mongoose = require("mongoose")
@@ -10,8 +10,7 @@ const createBook = async function (req, res) {
         if (!Validator.checkInputsPresent(req.body)) {
             return res.status(400).send({ status: false, message: "Insert data :Bad request" })
         }
-
-        text = ""
+       let text = ""
         if (!req.body.title) {
             text = "Please provide title of the book"
         } else {
@@ -76,13 +75,13 @@ const createBook = async function (req, res) {
             text = (text.length == 0) ? "Please provide subcategory of the book" : text + " ; " + "Please provide subcategory of the book"
         } else {
             if ((Array.isArray(req.body.subcategory) || typeof req.body.subcategory == "string")) {
-                if(Array.isArray(req.body.subcategory)){
-                    for(let ele of req.body.subcategory){
+                if (Array.isArray(req.body.subcategory)) {
+                    for (let ele of req.body.subcategory) {
                         if (!(/^[a-zA-z]{4,30}$/).test(ele)) {
                             text = (text.length == 0) ? `${ele} is not a valid subcategory` : text + " ; " + `${ele} is not a valid subcategory`
                         }
                     }
-                }else{
+                } else {
                     if (!(/^[a-zA-z]{4,30}$/).test(req.body.subcategory)) {
                         text = (text.length == 0) ? `${req.body.subcategory} is not a valid subcategory` : text + " ; " + `${req.body.subcategory} is not a valid subcategory`
                     }
@@ -99,13 +98,13 @@ const createBook = async function (req, res) {
             if (!(/^[0-9]{4}([\-])[0-9]{2}([\-])[0-9]{2}$/).test(req.body.releasedAt)) {
                 text = (text.length == 0) ? "Please provide date in format YYYY-MM-DD" : text + " ; " + "Please provide date in format YYYY-MM-DD"
             } else {
-                req.body.releasedAt=req.body.releasedAt.trim()
+                req.body.releasedAt = req.body.releasedAt.trim()
                 let date = moment(req.body.releasedAt, "YYYY-MM-DD")
                 if (!date.isValid()) {
                     text = (text.length == 0) ? "please provide valid date on releasedAt " : text + " ; " + "please provide valid date on releasedAt "
-                }else{
-                    if(date>Date.now()){
-                    text = (text.length == 0) ? "please provide past date on releasedAt " : text + " ; " + "please provide past date on releasedAt "
+                } else {
+                    if (date > Date.now()) {
+                        text = (text.length == 0) ? "please provide past date on releasedAt " : text + " ; " + "please provide past date on releasedAt "
                     }
                 }
             }
@@ -114,12 +113,12 @@ const createBook = async function (req, res) {
         if (text) {
             return res.status(400).send({ status: false, message: text })
         }
-        let saveBook=await bookModel.create(req.body)
+        let saveBook = await bookModel.create(req.body)
         return res.status(201).send({
             status: true,
             message: 'Success',
             data: saveBook
-          })
+        })
     }
     catch (err) {
         return res.status(500).send({ msg: err.message })
@@ -133,7 +132,7 @@ const getBookByQuery = async function (req, res) {
         let bookData = { isDeleted: false }
 
         if (Object.keys(data).length == 0) {
-           let getBooks = await bookModel.find(bookData).select({ _id: 1, title: 1, excerpt: 1, userId: 1, category: 1, reviews: 1, releasedAt: 1, }).sort({ title: 1 })
+            let getBooks = await bookModel.find(bookData).select({ _id: 1, title: 1, excerpt: 1, userId: 1, category: 1, reviews: 1, releasedAt: 1, }).sort({ title: 1 })
             return res.status(200).send({ status: true, message: 'Books list', data: getBooks })
         }
 
@@ -184,6 +183,6 @@ const getBookById = async function (req, res) {
 }
 
 
-module.exports = { createBook,getBookByQuery, getBookById }
+module.exports = { createBook, getBookByQuery, getBookById }
 
 
