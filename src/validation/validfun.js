@@ -16,7 +16,7 @@ const isValid = function (value) {
 //     return false
 // }
 const isValidTitle = function (title,inp) {
-    return inp.indexOf(title) !== -1;
+    return (inp.indexOf(title) !== -1);
   };
 
 const validateEmail = (email) => {
