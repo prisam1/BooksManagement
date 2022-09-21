@@ -99,17 +99,19 @@ const createBook = async function (req, res) {
                 text = (text.length == 0) ? "Please provide date in format YYYY-MM-DD" : text + " ; " + "Please provide date in format YYYY-MM-DD"
             } else {
                 req.body.releasedAt = req.body.releasedAt.trim()
-                let date = moment(req.body.releasedAt, "YYYY-MM-DD")
+                let date = moment(req.body.releasedAt)
+                // console.log(date);
                 if (!date.isValid()) {
                     text = (text.length == 0) ? "please provide valid date on releasedAt " : text + " ; " + "please provide valid date on releasedAt "
                 } else {
                     if (date > Date.now()) {
                         text = (text.length == 0) ? "please provide past date on releasedAt " : text + " ; " + "please provide past date on releasedAt "
                     }
+                    // req.body.releasedAt=date.format("DD-MM-YYYY")
+                    // console.log(req.body.releasedAt)
                 }
             }
         }
-
         if (text) {
             return res.status(400).send({ status: false, message: text })
         }
