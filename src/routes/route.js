@@ -14,5 +14,8 @@ router.get('/books/:bookId',middleware.authenticate,bookController.getBookById)
 router.put('/books/:bookId',middleware.authenticate,middleware.authorization,bookController.updateBook)
 router.delete('/books/:bookId',middleware.authenticate,middleware.authorization,bookController.deleteBook)
 
+router.all("/*", function (req, res) {
+    res.status(400).send({ status: false, message: "Invalid path params" });
+  });
 
 module.exports=router

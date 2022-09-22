@@ -204,7 +204,7 @@ const updateBook = async function (req, res) {
         if(req.body["release date"]){
             req.body.releasedAt=req.body["release date"]
         }
-        
+
         if (!req.body.releasedAt) {
         } else {
             
@@ -262,9 +262,8 @@ const deleteBook = async function (req, res){
             return res.status(400).send({ status : false , message : "Invalid bookId"})
         }
         
-        let book = await bookModel.findOne({_id : bookId, isDeleted : false})
+        let book = await bookModel.findOneAndUpdate({_id : bookId, isDeleted : false},{isDeleted : true, deletedAt : new Date()})
         if (book){
-            const deleteBook = await bookModel.findOneAndUpdate({ _id : bookId}, {isDeleted : true, deletedAt : new Date()})
             return res.status (200).send({ status : true, message : "Book deleted successfuly"})
         }
         else {return res.status(400).send({status : false, message : "Book not found"})
