@@ -201,8 +201,13 @@ const updateBook = async function (req, res) {
             }
         }
 
+        if(req.body["release date"]){
+            req.body.releasedAt=req.body["release date"]
+        }
+        
         if (!req.body.releasedAt) {
         } else {
+            
             if (!(/^[0-9]{4}([\-])[0-9]{2}([\-])[0-9]{2}$/).test(req.body.releasedAt)) {
                 text = (text.length == 0) ? "Please provide date in format YYYY-MM-DD" : text + " ; " + "Please provide date in format YYYY-MM-DD"
             } else {
