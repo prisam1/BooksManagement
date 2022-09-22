@@ -11,7 +11,7 @@ router.post('/login',userController.login)
 router.post('/books',middleware.authenticate,middleware.authorization,bookController.createBook)
 router.get('/books',middleware.authenticate,bookController.getBookByQuery)
 router.get('/books/:bookId',middleware.authenticate,bookController.getBookById)
-
+router.delete('/books/:bookId',middleware.authorization,bookController.deleteBook)
 
 
 module.exports=router
