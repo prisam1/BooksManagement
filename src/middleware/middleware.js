@@ -60,7 +60,7 @@ const authorization = async (req, res, next) => {
                     }
                     next()
                 }else{
-                    return res.status(403).send({ status: false, message: "Please provide userId" })
+                    return res.status(403).send({ status: false, message: "Please provide userId for Authorization" })
                 }
             } else {
                 return res.status(400).send({ status: false, message: "Insert data :Bad request" })
