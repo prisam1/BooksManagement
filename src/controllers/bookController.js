@@ -10,7 +10,7 @@ const createBook = async function (req, res) {
         if (!Validator.checkInputsPresent(req.body)) {
             return res.status(400).send({ status: false, message: "Insert data :Bad request" })
         }
-       let text = ""
+        let text = ""
         if (!req.body.title) {
             text = "Please provide title of the book"
         } else {
@@ -74,22 +74,10 @@ const createBook = async function (req, res) {
         if (!req.body.subcategory) {
             text = (text.length == 0) ? "Please provide subcategory of the book" : text + " ; " + "Please provide subcategory of the book"
         } else {
-            if ((Array.isArray(req.body.subcategory) || typeof req.body.subcategory == "string")) {
-                if (Array.isArray(req.body.subcategory)) {
-                    for (let ele of req.body.subcategory) {
-                        if (!(/^[a-zA-z]{4,30}$/).test(ele)) {
-                            text = (text.length == 0) ? `${ele} is not a valid subcategory` : text + " ; " + `${ele} is not a valid subcategory`
-                        }
-                    }
-                } else {
-                    if (!(/^[a-zA-z]{4,30}$/).test(req.body.subcategory)) {
-                        text = (text.length == 0) ? `${req.body.subcategory} is not a valid subcategory` : text + " ; " + `${req.body.subcategory} is not a valid subcategory`
-                    }
-                }
-            } else {
-                text = (text.length == 0) ? "SubCategory must be an String or Array" : text + " ; " + "SubCategory can be an String or Array"
+            req.body.subcategory = req.body.subcategory.trim()
+            if (!(/^[a-zA-z]{4,30}$/).test(req.body.subcategory)) {
+                text = (text.length == 0) ? `${req.body.subcategory} is not a valid subcategory` : text + " ; " + `${req.body.subcategory} is not a valid subcategory`
             }
-
         }
 
         if (!req.body.releasedAt) {
@@ -184,7 +172,81 @@ const getBookById = async function (req, res) {
     }
 }
 
+const updateBook = async function (req, res) {
+    try {
+        if (!Validator.checkInputsPresent(req.body)) {
+            return res.status(400).send({ status: false, message: "Insert data :Bad request" })
+        }
 
-module.exports = { createBook, getBookByQuery, getBookById }
+        let ID = req.params.bookId
+        let text=''
+        if (!req.body.title) {
+        } else {
+            req.body.title = req.body.title.trim()
+            if (!(/^[a-zA-z ]{2,50}$/).test(req.body.title)) {
+                text = "Title must consist of only letters"
+            } else {
+                let title = await bookModel.findOne({ title: req.body.title })
+                if (title) {
+                    text = "Title is already present, Title must be unique."
+                }
+            }
+        }
+
+        if (!req.body.excerpt) {
+        } else {
+            req.body.excerpt = req.body.excerpt.trim()
+            if (!(/^[a-zA-z ]{2,100}$/).test(req.body.excerpt)) {
+                text = (text.length == 0) ? "Excerpt must consist of only letters" : text + " ; " + "Excerpt must consist of only letters"
+            }
+        }
+
+        if (!req.body.releasedAt) {
+        } else {
+            if (!(/^[0-9]{4}([\-])[0-9]{2}([\-])[0-9]{2}$/).test(req.body.releasedAt)) {
+                text = (text.length == 0) ? "Please provide date in format YYYY-MM-DD" : text + " ; " + "Please provide date in format YYYY-MM-DD"
+            } else {
+                req.body.releasedAt = req.body.releasedAt.trim()
+                let date = moment(req.body.releasedAt)
+                // console.log(date);
+                if (!date.isValid()) {
+                    text = (text.length == 0) ? "please provide valid date on releasedAt " : text + " ; " + "please provide valid date on releasedAt "
+                } else {
+                    if (date > Date.now()) {
+                        text = (text.length == 0) ? "please provide past date on releasedAt " : text + " ; " + "please provide past date on releasedAt "
+                    }
+                    // req.body.releasedAt=date.format("DD-MM-YYYY")
+                    // console.log(req.body.releasedAt)
+                }
+            }
+        }
+
+        if (!req.body.ISBN) {
+        } else {
+            req.body.ISBN = req.body.ISBN.trim()
+            if (!(/^[0-9]{3}([\-])[0-9]{10}$/).test(req.body.ISBN)) {
+                text = (text.length == 0) ? "Please provide valid 13 digit valid ISBN number" : text + " ; " + "Please provide valid 13 digit valid ISBN number"
+            } else {
+                let ISBN = await bookModel.findOne({ ISBN: req.body.ISBN });
+                if (ISBN) {
+                    text = (text.length == 0) ? "Please provide unique ISBN number" : text + " ; " + "Please provide unique ISBN number"
+                }
+            }
+        }
+
+        if(text){
+            return res.status(400).send({status:false,message:text});
+        }
+
+        let updatedData=await bookModel.findByIdAndUpdate(ID,req.body,{new:true});
+        return res.status(200).send({status:false,message:"Success",data:updatedData});
+    }
+    catch(err){
+        return res.status(500).send({status:false,message:err.message});
+    }
+
+
+}
+module.exports = { createBook, getBookByQuery, getBookById,updateBook }
 
 
