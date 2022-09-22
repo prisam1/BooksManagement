@@ -238,7 +238,10 @@ const updateBook = async function (req, res) {
             return res.status(400).send({status:false,message:text});
         }
 
-        let updatedData=await bookModel.findByIdAndUpdate(ID,req.body,{new:true});
+        let updatedData=await bookModel.findOneAndUpdate({_id:ID,isDeleted:false},req.body,{new:true});
+        if(!updatedData){
+            return res.status(404).send({status:false,message:"No book found"});
+        }
         return res.status(200).send({status:false,message:"Success",data:updatedData});
     }
     catch(err){

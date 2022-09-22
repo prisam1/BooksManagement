@@ -31,7 +31,7 @@ const authorization = async (req, res, next) => {
     try {
 
         let token = req.headers["x-api-key" || "X-Api-Key"]
-        console.log(req.method, req.route.path)
+        // console.log(req.method, req.route.path)
         if (!token) {
             return res.status(400).send({ status: false, message: "no token found" })
         }
@@ -40,7 +40,7 @@ const authorization = async (req, res, next) => {
                 let bookId = req.params.bookId
 
                 if (!ObjectID.isValid(bookId)) { return res.status(401).send({ status: false, message: "Not a valid BookID" }) }
-                let book = await bookModel.findById(bookId)
+                let book = await bookModel.findOne({_id:bookId,isDeleted:false})
                 if (!book) { return res.status(404).send({ status: false, message: "No such book exists" }) }
 
                 if (book.userId != req.decodedToken.userId) {
