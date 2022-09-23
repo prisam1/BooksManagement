@@ -127,7 +127,7 @@ const updateReview = async (req, res) => {
 
         const updatedReview = await reviewModel.findOneAndUpdate({ _id: reviewID, isDeleted: false },{$set: updateQuery },{ new: true })
 
-         let finalReview = { ...updatedReview.toObject() }
+         let finalReview = {updatedReview }
                        
         return res.status(200).send({ status: true, message: "Success", Data: { ...isBook.toObject(), reviewsData: [finalReview] } })
 
