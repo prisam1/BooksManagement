@@ -48,12 +48,10 @@ const createReview = async function (req, res) {
 
         details.bookId = bookId
         const data = await reviewModel.create(details)
-        bookDetails.review = bookDetails.review + 1
 
-        await booksModel.findOneAndUpdate({ _id: bookId }, { review: bookDetails.review }, { new: true })
+        saveData = await booksModel.findOneAndUpdate({ _id: bookId }, { $inc: { reviews: +1 } }, { new: true })
 
-        let book = bookDetails
-        bookDetails = { book, reviewData: data }
+        bookDetails = {_id:saveData._id,title:saveData.title,excerpt:saveData.excerpt,userId:saveData.userId,category:saveData.category,subcategory:saveData.subcategory,isDeleted:saveData.isDeleted,reviews:saveData.reviews, reviewsData: data }
 
         res.status(201).send({ status: true, message: "books list", data: bookDetails })
     }
