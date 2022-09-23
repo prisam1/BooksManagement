@@ -11,9 +11,9 @@ router.post('/login',userController.login)
 router.post('/books',middleware.authenticate,middleware.authorization,bookController.createBook)
 router.get('/books',middleware.authenticate,bookController.getBookByQuery)
 router.get('/books/:bookId',middleware.authenticate,bookController.getBookById)
+router.put('/books/:bookId',middleware.authenticate,middleware.authorization,bookController.updateBook)
+router.delete('/books/:bookId',middleware.authenticate,middleware.authorization,bookController.deleteBook)
 
-//middleware.authenticate,middleware.authorization,
-//middleware.authenticate,bookController.
-//middleware.authenticate,bookController.
+
 
 module.exports=router
