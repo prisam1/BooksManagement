@@ -49,11 +49,11 @@ const createReview = async function (req, res) {
         details.bookId = bookId
         const data = await reviewModel.create(details)
 
-        saveData = await booksModel.findOneAndUpdate({ _id: bookId }, { $inc: { reviews: +1 } }, { new: true })
+        let saveData = await booksModel.findOneAndUpdate({ _id: bookId }, { $inc: { reviews: +1 } }, { new: true })
+        let allrev=await reviewModel.find({bookId:bookId,isDeleted:false})
+        bookDetails = {_id:saveData._id,title:saveData.title,excerpt:saveData.excerpt,userId:saveData.userId,category:saveData.category,subcategory:saveData.subcategory,isDeleted:saveData.isDeleted,reviews:saveData.reviews, reviewsData:allrev }
 
-        bookDetails = {_id:saveData._id,title:saveData.title,excerpt:saveData.excerpt,userId:saveData.userId,category:saveData.category,subcategory:saveData.subcategory,isDeleted:saveData.isDeleted,reviews:saveData.reviews, reviewsData: data }
-
-        res.status(201).send({ status: true, message: "books list", data: bookDetails })
+        res.status(201).send({ status: true, message: "Success", data: bookDetails })
     }
     catch (err) {
         res.status(500).send({ status: false, message: err.message });
@@ -125,10 +125,11 @@ const updateReview = async (req, res) => {
 
         dataToUpdate.reviewedAt=Date.now();
 
-        const updatedReview = await reviewModel.findOneAndUpdate({ _id: reviewID, isDeleted: false }, { $set: updateQuery }, { new: true })
+        await reviewModel.findOneAndUpdate({ _id: reviewID, isDeleted: false }, { $set: updateQuery }, { new: true })
+        let allrev=await reviewModel.find({bookId:bookId,isDeleted:false})
+        bookDetails = {_id:isBook._id,title:isBook.title,excerpt:isBook.excerpt,userId:isBook.userId,category:isBook.category,subcategory:isBook.subcategory,isDeleted:isBook.isDeleted,reviews:isBook.reviews, reviewsData:allrev }
 
-
-        return res.status(200).send({ status: true, message: "Success", Data: {isBook, reviewsData: updatedReview } })
+        return res.status(200).send({ status: true, message: "Success", Data:bookDetails })
 
     } catch (error) {
         res.status(500).send({ status: false, message: error.message })
