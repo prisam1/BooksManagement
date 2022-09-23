@@ -128,8 +128,7 @@ const updateReview = async (req, res) => {
         const updatedReview = await reviewModel.findOneAndUpdate({ _id: reviewID, isDeleted: false },{$set: updateQuery },{ new: true })
 
          let finalReview = { ...updatedReview.toObject() }
-         delete finalReview.isDeleted
-         delete finalReview.__v
+                       
         return res.status(200).send({ status: true, message: "Success", Data: { ...isBook.toObject(), reviewsData: [finalReview] } })
 
     } catch (error) {
