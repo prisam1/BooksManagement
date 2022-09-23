@@ -23,7 +23,7 @@ const createReview = async function (req, res) {
         let bookDetails = await booksModel.findOne({ _id: bookId, isDeleted: false });
         if (!bookDetails) { res.status(404).send({ status: false, message: "The book doesn't exist" }) }
 
-        let { reviewedBy,rating, review } = details
+        let { reviewedBy, rating, review } = details
 
         if (details.hasOwnProperty("reviewedBy")) {
             if (!isValid(reviewedBy)) { return res.status(400).send({ status: false, message: "reviewedBy is required and it must be string" }) }
@@ -31,7 +31,7 @@ const createReview = async function (req, res) {
             if (!name) return res.status(400).send({ status: false, message: "enter valid name" })
         }
 
-       details.reviewedAt=Date.now();
+        details.reviewedAt = Date.now();
 
 
         if (rating === undefined) return res.status(400).send({ status: false, message: "rating is required" })
@@ -47,11 +47,11 @@ const createReview = async function (req, res) {
         }
 
         details.bookId = bookId
-        const data = await reviewModel.create(details)
+        await reviewModel.create(details)
 
         let saveData = await booksModel.findOneAndUpdate({ _id: bookId }, { $inc: { reviews: +1 } }, { new: true })
-        let allrev=await reviewModel.find({bookId:bookId,isDeleted:false})
-        bookDetails = {_id:saveData._id,title:saveData.title,excerpt:saveData.excerpt,userId:saveData.userId,category:saveData.category,subcategory:saveData.subcategory,isDeleted:saveData.isDeleted,reviews:saveData.reviews, reviewsData:allrev }
+        let allrev = await reviewModel.find({ bookId: bookId, isDeleted: false })
+        bookDetails = { _id: saveData._id, title: saveData.title, excerpt: saveData.excerpt, userId: saveData.userId, category: saveData.category, subcategory: saveData.subcategory, isDeleted: saveData.isDeleted, reviews: saveData.reviews, reviewsData: allrev }
 
         res.status(201).send({ status: true, message: "Success", data: bookDetails })
     }
@@ -123,13 +123,13 @@ const updateReview = async (req, res) => {
             updateQuery.review = review
         }
 
-        dataToUpdate.reviewedAt=Date.now();
+        dataToUpdate.reviewedAt = Date.now();
 
         await reviewModel.findOneAndUpdate({ _id: reviewID, isDeleted: false }, { $set: updateQuery }, { new: true })
-        let allrev=await reviewModel.find({bookId:bookId,isDeleted:false})
-        bookDetails = {_id:isBook._id,title:isBook.title,excerpt:isBook.excerpt,userId:isBook.userId,category:isBook.category,subcategory:isBook.subcategory,isDeleted:isBook.isDeleted,reviews:isBook.reviews, reviewsData:allrev }
+        let allrev = await reviewModel.find({ bookId: bookId, isDeleted: false })
+        bookDetails = { _id: isBook._id, title: isBook.title, excerpt: isBook.excerpt, userId: isBook.userId, category: isBook.category, subcategory: isBook.subcategory, isDeleted: isBook.isDeleted, reviews: isBook.reviews, reviewsData: allrev }
 
-        return res.status(200).send({ status: true, message: "Success", Data:bookDetails })
+        return res.status(200).send({ status: true, message: "Success", Data: bookDetails })
 
     } catch (error) {
         res.status(500).send({ status: false, message: error.message })
@@ -139,14 +139,14 @@ const updateReview = async (req, res) => {
 
 const deleteReview = async (req, res) => {
     try {
-        
+
         let bookId = req.params.bookId
         let reviewId = req.params.reviewId
-       
+
         if (!mongoose.Types.ObjectId.isValid(bookId)) {
             return res.status(400).send({ status: false, message: "NOT A VALID BOOKID" })
         }
-       
+
         if (!mongoose.Types.ObjectId.isValid(reviewId)) {
             return res.status(400).send({ status: false, message: "NOT A VALID REVIEWID" })
         }
@@ -184,4 +184,4 @@ const deleteReview = async (req, res) => {
 }
 
 
-module.exports = { createReview, updateReview ,deleteReview}
+module.exports = { createReview, updateReview, deleteReview }

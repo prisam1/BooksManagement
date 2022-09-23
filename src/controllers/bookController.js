@@ -162,7 +162,7 @@ const getBookById = async function (req, res) {
         if (!saveData) { return res.status(404).send({ status: false, message: "book not found" }) }
 
 
-        let data = await reviewModel.find({ bookId: bookId })
+        let data = await reviewModel.find({ bookId: bookId,isDeleted:false })
         // console.log(saveData)
 
         bookDetails = {_id:saveData._id,title:saveData.title,excerpt:saveData.excerpt,userId:saveData.userId,category:saveData.category,subcategory:saveData.subcategory,isDeleted:saveData.isDeleted,reviews:saveData.reviews, reviewsData: data }
