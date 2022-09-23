@@ -83,7 +83,7 @@ const createBook = async function (req, res) {
         if (!req.body.releasedAt) {
             text = (text.length == 0) ? "Please provide releasedAt" : text + " ; " + "Please provide releasedAt"
         } else {
-            if (!(/^[0-9]{4}([\-])[0-9]{2}([\-])[0-9]{2}$/).test(req.body.releasedAt)) {
+            if (!(/^[12]{1}[0-9]{3}([\-])(0[1-9]|1[0-2])([\-])(0[1-9]|[12]\d|3[01])$/).test(req.body.releasedAt)) {
                 text = (text.length == 0) ? "Please provide date in format YYYY-MM-DD" : text + " ; " + "Please provide date in format YYYY-MM-DD"
             } else {
                 req.body.releasedAt = req.body.releasedAt.trim()
