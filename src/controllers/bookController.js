@@ -2,7 +2,7 @@
 const bookModel = require('../models/bookModel')
 const userModel = require('../models/userModel.js')
 const Validator = require("../validation/validfun")
-const reviewModel=require('../models/reviewModel.js')
+const reviewModel = require('../models/reviewModel.js')
 let mongoose = require("mongoose")
 let moment = require("moment")
 
@@ -11,6 +11,7 @@ const createBook = async function (req, res) {
         if (!Validator.checkInputsPresent(req.body)) {
             return res.status(400).send({ status: false, message: "Insert data :Bad request" })
         }
+
         let text = ""
         if (!req.body.title) {
             text = "Please provide title of the book"
@@ -44,7 +45,7 @@ const createBook = async function (req, res) {
             } else {
                 let user = await userModel.findById(req.body.userId);
                 if (!user) {
-                    text = (text.length == 0) ? "NO author found with this userId" : text + " ; " + "NO author found with this userId"
+                    return res.status(404).send({ status: false, message: "no user found with this userId" })
                 }
             }
         }
@@ -158,17 +159,17 @@ const getBookById = async function (req, res) {
         var isValidId = mongoose.Types.ObjectId.isValid(bookId)
         if (!isValidId) return res.status(400).send({ status: false, message: "Enter valid book id" })
 
-        let saveData = await bookModel.findOne({ _id: bookId, isDeleted: false }).select({_id:1,title:1,excerpt:1,userId:1,category:1,subcategory:1,isDeleted:1,reviews:1})
+        let saveData = await bookModel.findOne({ _id: bookId, isDeleted: false }).select({ _id: 1, title: 1, excerpt: 1, userId: 1, category: 1, subcategory: 1, isDeleted: 1, reviews: 1 })
         if (!saveData) { return res.status(404).send({ status: false, message: "book not found" }) }
 
 
-        let data = await reviewModel.find({ bookId: bookId,isDeleted:false })
+        let data = await reviewModel.find({ bookId: bookId, isDeleted: false })
         // console.log(saveData)
 
-        bookDetails = {_id:saveData._id,title:saveData.title,excerpt:saveData.excerpt,userId:saveData.userId,category:saveData.category,subcategory:saveData.subcategory,isDeleted:saveData.isDeleted,reviews:saveData.reviews, reviewsData: data }
+        bookDetails = { _id: saveData._id, title: saveData.title, excerpt: saveData.excerpt, userId: saveData.userId, category: saveData.category, subcategory: saveData.subcategory, isDeleted: saveData.isDeleted, reviews: saveData.reviews, reviewsData: data }
         // bookDetails = {...saveData, reviewsData: data }
 
-        res.status(200).send({ status: true, message: "Book List", data: bookDetails})
+        res.status(200).send({ status: true, message: "Book List", data: bookDetails })
     } catch (err) {
         res.status(500).send({ message: 'Error', error: err.message })
     }
@@ -181,7 +182,7 @@ const updateBook = async function (req, res) {
         }
 
         let ID = req.params.bookId
-        let text=''
+        let text = ''
         if (!req.body.title) {
         } else {
             req.body.title = req.body.title.trim()
@@ -203,8 +204,8 @@ const updateBook = async function (req, res) {
             }
         }
 
-        if(req.body["release date"]){
-            req.body.releasedAt=req.body["release date"]
+        if (req.body["release date"]) {
+            req.body.releasedAt = req.body["release date"]
         }
 
         if (!req.body.releasedAt) {
@@ -240,42 +241,43 @@ const updateBook = async function (req, res) {
             }
         }
 
-        if(text){
-            return res.status(400).send({status:false,message:text});
+        if (text) {
+            return res.status(400).send({ status: false, message: text });
         }
 
-        let updatedData=await bookModel.findOneAndUpdate({_id:ID,isDeleted:false},req.body,{new:true});
-        if(!updatedData){
-            return res.status(404).send({status:false,message:"No book found"});
+        let updatedData = await bookModel.findOneAndUpdate({ _id: ID, isDeleted: false }, req.body, { new: true });
+        if (!updatedData) {
+            return res.status(404).send({ status: false, message: "No book found" });
         }
-        return res.status(200).send({status:false,message:"Success",data:updatedData});
+        return res.status(200).send({ status: false, message: "Success", data: updatedData });
     }
-    catch(err){
-        return res.status(500).send({status:false,message:err.message});
+    catch (err) {
+        return res.status(500).send({ status: false, message: err.message });
     }
 }
 
 // -----------> delete book
-const deleteBook = async function (req, res){
+const deleteBook = async function (req, res) {
     try {
         let bookId = req.params.bookId
-        if (!mongoose.Types.ObjectId.isValid(bookId)){
-            return res.status(400).send({ status : false , message : "Invalid bookId"})
+        if (!mongoose.Types.ObjectId.isValid(bookId)) {
+            return res.status(400).send({ status: false, message: "Invalid bookId" })
         }
-        
-        let book = await bookModel.findOneAndUpdate({_id : bookId, isDeleted : false},{isDeleted : true, deletedAt : new Date()})
-        if (book){
-            return res.status (200).send({ status : true, message : "Book deleted successfuly"})
+
+        let book = await bookModel.findOneAndUpdate({ _id: bookId, isDeleted: false }, { isDeleted: true, deletedAt: new Date() })
+        if (book) {
+            return res.status(200).send({ status: true, message: "Book deleted successfuly" })
         }
-        else {return res.status(400).send({status : false, message : "Book not found"})
-    }
-    
-} catch (err) {
-    res.status(500).send({ message: 'Error', error: err.message })
+        else {
+            return res.status(400).send({ status: false, message: "Book not found" })
+        }
+
+    } catch (err) {
+        res.status(500).send({ message: 'Error', error: err.message })
     }
 }
 
 
-module.exports = { createBook,getBookByQuery, getBookById,deleteBook ,updateBook}
+module.exports = { createBook, getBookByQuery, getBookById, deleteBook, updateBook }
 
 
