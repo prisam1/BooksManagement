@@ -92,92 +92,110 @@ const createUser1 = async function (req, res) {
         let text = ""
 
         if (!req.body.title) {
-            text = "Please provide title"
+                // return res.status(400).send({status:false,message:})
+                text = "Please provide title"
         } else {
             req.body.title = req.body.title.trim()
             if (!Validator.isValidTitle(req.body.title.trim(), ["Mr", "Mrs", "Miss"])) {
+                // return res.status(400).send({status:false,message:})
                 text = "Please provide a valid title form Mr, Mrs and Miss"
             }
         }
 
         if (!req.body.name) {
-            text = (text.length == 0) ? "Please provide name" : text + " ; " + "Please provide name"
+                // return res.status(400).send({status:false,message:})
+                text = (text.length == 0) ? "Please provide name" : text + " ; " + "Please provide name"
         } else {
             req.body.name = req.body.name.trim()
             if (!(/^[a-zA-Z ]{2,20}$/).test(req.body.name.trim())) {
+                // return res.status(400).send({status:false,message:})
                 text = (text.length == 0) ? "Please provide valid name" : text + " ; " + "Please provide valid name"
             }
         }
 
         if (!req.body.phone) {
-            text = (text.length == 0) ? "Please provide phone" : text + " ; " + "Please provide phone"
+                // return res.status(400).send({status:false,message:})
+                text = (text.length == 0) ? "Please provide phone" : text + " ; " + "Please provide phone"
         } else {
-            req.body.phone = req.body.phone.trim()
             if (!Validator.validateMobileNo(req.body.phone)) {
+                // return res.status(400).send({status:false,message:})
                 text = (text.length == 0) ? "Please provide valid phone" : text + " ; " + "Please provide valid phone"
             } else {
                 let fphone = await userModel.findOne({ phone: req.body.phone })
                 if (fphone) {
-                    text = (text.length == 0) ? "Phone number aleardy Exist" : text + " ; " + "Phone number aleardy Exist"
+                // return res.status(400).send({status:false,message:})
+                text = (text.length == 0) ? "Phone number aleardy Exist" : text + " ; " + "Phone number aleardy Exist"
                 }
             }
         }
 
         if (!req.body.email) {
-            text = (text.length == 0) ? "Please provide email" : text + " ; " + "Please provide email"
+                // return res.status(400).send({status:false,message:})
+                text = (text.length == 0) ? "Please provide email" : text + " ; " + "Please provide email"
         } else {
             req.body.email = req.body.email.trim()
             if (!Validator.validateEmail(req.body.email)) {
+                // return res.status(400).send({status:false,message:})
                 text = (text.length == 0) ? "Please provide valid email" : text + " ; " + "Please provide valid email"
             } else {
                 let email = await userModel.findOne({ email: req.body.email })
                 if (email) {
-                    text = (text.length == 0) ? "email aleardy Exist" : text + " ; " + "email aleardy Exist"
+                // return res.status(400).send({status:false,message:})
+                text = (text.length == 0) ? "email aleardy Exist" : text + " ; " + "email aleardy Exist"
                 }
             }
 
         }
 
         if (!req.body.password) {
-            text = (text.length == 0) ? "Please provide password" : text + " ; " + "Please provide password"
+                // return res.status(400).send({status:false,message:})
+                text = (text.length == 0) ? "Please provide password" : text + " ; " + "Please provide password"
         } else {
             req.body.password = req.body.password.trim()
             if (!Validator.validPassword(req.body.password)) {
+                // return res.status(400).send({status:false,message:})
                 text = (text.length == 0) ? "Password must have one uppercase letter, one lowercase letter, one special charecter and one number and must consist of 8 to 15 charectors." : text + " ; " + "Password must have one uppercase letter, one lowercase letter, one special charecter and one number and must consist of 8 to 15 charectors."
             }
         }
 
         if (req.body.address) {
             if (typeof req.body.address !== "object" || Array.isArray(req.body.address)) {
+                // return res.status(400).send({status:false,message:})
                 text = (text.length == 0) ? "address should be in object" : text + " ; " + "address should be in object"
             } else {
                 let street = req.body.address.street
                 if (!street) {
-                    text = (text.length == 0) ? "Please provide street in address" : text + " ; " + "Please provide street in address"
+                // return res.status(400).send({status:false,message:})
+                text = (text.length == 0) ? "Please provide street in address" : text + " ; " + "Please provide street in address"
                 } else {
                     street = street.trim()
                     if (!(/^[0-9a-zA-Z ,]{2,100}$/).test(street)) {
-                        text = (text.length == 0) ? "Please provide valid street in address" : text + " ; " + "Please provide valid street in address"
+                // return res.status(400).send({status:false,message:})
+                text = (text.length == 0) ? "Please provide valid street in address" : text + " ; " + "Please provide valid street in address"
                     }
                 }
 
                 let city = req.body.address.city
                 if (!city) {
-                    text = (text.length == 0) ? "Please provide city in address" : text + " ; " + "Please provide city in address"
+                // return res.status(400).send({status:false,message:})
+                text = (text.length == 0) ? "Please provide city in address" : text + " ; " + "Please provide city in address"
                 } else {
                     city = city.trim()
                     if (!(/^[a-zA-Z]{2,20}$/).test(city)) {
-                        text = (text.length == 0) ? "Please provide valid city in address" : text + " ; " + "Please provide city in address"
+                // return res.status(400).send({status:false,message:})
+                text = (text.length == 0) ? "Please provide valid city in address" : text + " ; " + "Please provide city in address"
                     }
                 }
 
                 let pincode = req.body.address.pincode
                 if (!pincode) {
-                    text = (text.length == 0) ? "Please provide pincode in address" : text + " ; " + "Please provide pincode in address"
+                // return res.status(400).send({status:false,message:})
+                text = (text.length == 0) ? "Please provide pincode in address" : text + " ; " + "Please provide pincode in address"
                 } else {
                     pincode = pincode.trim()
                     if (!(/^[1-9][0-9]{5}$/).test(pincode)) {
-                        text = (text.length == 0) ? "Please provide valid pincode in address" : text + " ; " + "Please provide valid pincode in address"
+                // return res.status(400).send({status:false,message:})
+                text = (text.length == 0) ? "Please provide valid pincode in address" : text + " ; " + "Please provide valid pincode in address"
                     }
                 }
 

@@ -9,7 +9,7 @@ let ObjectID = mongoose.Types.ObjectId
 const authenticate = function (req, res, next) {
     try {
 
-        let token = req.headers["x-api-key" || "X-Api-Key"]
+        let token = req.headers["x-api-key"]
         if (!token) {
             return res.status(400).send({ status: false, message: "no token found" })
         }
@@ -60,7 +60,7 @@ const authorization = async (req, res, next) => {
                             return res.status(403).send({ status: false, message: "You are not a authorized user" })
                         }
                     }else{
-                        return res.status(403).send({ status: false, message: "Please provide valid userId" })
+                        return res.status(400).send({ status: false, message: "Please provide valid userId" })
                     }
                     next()
                 } else {
