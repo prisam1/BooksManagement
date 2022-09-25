@@ -10,10 +10,6 @@ const isValid = function (value) {
     return true
 }
 
-
-
-
-
 const createReview = async function (req, res) {
     try {
         const details = req.body
