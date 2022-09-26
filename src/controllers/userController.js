@@ -158,7 +158,7 @@ const createUser1 = async function (req, res) {
             }
         }
 
-        if (req.body.address) {
+        if (req.body.hasOwnProperty('address')) {
             if (typeof req.body.address !== "object" || Array.isArray(req.body.address)) {
                 // return res.status(400).send({status:false,message:"address should be in object"})
                 text = (text.length == 0) ? "address should be in object" : text + " ; " + "address should be in object"
