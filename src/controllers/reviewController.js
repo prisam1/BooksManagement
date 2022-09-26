@@ -63,7 +63,7 @@ const createReview = async function (req, res) {
         }
 
         details.bookId = bookId
-       let reviewdata = await reviewModel.create(details) 
+        let reviewdata = await reviewModel.create(details) 
 
         let saveData = await booksModel.findOneAndUpdate({ _id: bookId }, { $inc: { reviews: +1 } }, { new: true })
         bookDetails = {
