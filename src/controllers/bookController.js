@@ -299,7 +299,7 @@ const deleteBook = async function (req, res) {
             return res.status(200).send({ status: true, message: "Book deleted successfuly" })
         }
         else {
-            return res.status(400).send({ status: false, message: "Book not found" })
+            return res.status(404).send({ status: false, message: "Book not found" })
         }
 
     } catch (err) {
