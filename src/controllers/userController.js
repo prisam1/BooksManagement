@@ -86,6 +86,7 @@ const createUser = async function (req, res) {
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------
 const createUser1 = async function (req, res) {
     try {
+        console.log(req.body)
         if (!Validator.checkInputsPresent(req.body)) {
             return res.status(400).send({ status: false, message: "Insert data :Bad request" })
         }

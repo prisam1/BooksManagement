@@ -3,9 +3,6 @@ const bookModel = require("../models/bookModel")
 const mongoose = require('mongoose')
 let ObjectID = mongoose.Types.ObjectId
 
-
-
-
 const authenticate = function (req, res, next) {
     try {
 
@@ -15,7 +12,7 @@ const authenticate = function (req, res, next) {
         }
         jwt.verify(token, "This is our Secret", function (err, decodedToken) {
             if (err) {
-                return res.status(400).send({ status: false, message: err.message })
+                return res.status(401).send({ status: false, message: err.message })
             }
             req.decodedToken = decodedToken
             console.log(decodedToken)
