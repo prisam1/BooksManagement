@@ -14,7 +14,7 @@ const createBook = async function (req, res) {
 
         let text = ""
         if (!req.body.title) {
-                // return res.status(400).send({status:false,message:"Please provide title of the book"})
+            // return res.status(400).send({status:false,message:"Please provide title of the book"})
             text = "Please provide title of the book"
         } else {
             req.body.title = req.body.title.trim()
@@ -24,14 +24,14 @@ const createBook = async function (req, res) {
             } else {
                 let title = await bookModel.findOne({ title: req.body.title })
                 if (title) {
-                // return res.status(400).send({status:false,message:"Title is already present."})
+                    // return res.status(400).send({status:false,message:"Title is already present."})
                     text = "Title is already present."
                 }
             }
         }
 
         if (!req.body.excerpt) {
-                // return res.status(400).send({status:false,message:"Please provide excerpt of the book"})
+            // return res.status(400).send({status:false,message:"Please provide excerpt of the book"})
             text = (text.length == 0) ? "Please provide excerpt of the book" : text + " ; " + "Please provide excerpt of the book"
         } else {
             req.body.excerpt = req.body.excerpt.trim()
@@ -42,7 +42,7 @@ const createBook = async function (req, res) {
         }
 
         if (!req.body.userId) {
-                // return res.status(400).send({status:false,message:"Please provide userId of the author"})
+            // return res.status(400).send({status:false,message:"Please provide userId of the author"})
             text = (text.length == 0) ? "Please provide userId of the author" : text + " ; " + "Please provide userId of the author"
         } else {
             req.body.userId = req.body.userId.trim()
@@ -58,8 +58,8 @@ const createBook = async function (req, res) {
         }
 
         if (!req.body.ISBN) {
-                // return res.status(400).send({status:false,message:"Please provide ISBN number of the book"})
-                text = (text.length == 0) ? "Please provide ISBN number of the book" : text + " ; " + "Please provide ISBN number of the book"
+            // return res.status(400).send({status:false,message:"Please provide ISBN number of the book"})
+            text = (text.length == 0) ? "Please provide ISBN number of the book" : text + " ; " + "Please provide ISBN number of the book"
         } else {
             req.body.ISBN = req.body.ISBN.trim()
             if (!(/^[0-9]{3}([\-])[0-9]{10}$/).test(req.body.ISBN)) {
@@ -68,15 +68,15 @@ const createBook = async function (req, res) {
             } else {
                 let ISBN = await bookModel.findOne({ ISBN: req.body.ISBN });
                 if (ISBN) {
-                // return res.status(400).send({status:false,message:"Please provide unique ISBN number"})
-                text = (text.length == 0) ? "Please provide unique ISBN number" : text + " ; " + "Please provide unique ISBN number"
+                    // return res.status(400).send({status:false,message:"Please provide unique ISBN number"})
+                    text = (text.length == 0) ? "Please provide unique ISBN number" : text + " ; " + "Please provide unique ISBN number"
                 }
             }
         }
 
         if (!req.body.category) {
-                // return res.status(400).send({status:false,message:"Please provide category of the book"})
-                text = (text.length == 0) ? "Please provide category of the book" : text + " ; " + "Please provide category of the book"
+            // return res.status(400).send({status:false,message:"Please provide category of the book"})
+            text = (text.length == 0) ? "Please provide category of the book" : text + " ; " + "Please provide category of the book"
         } else {
             req.body.category = req.body.category.trim()
             if (!(/^[a-zA-z ]{4,30}$/).test(req.body.category)) {
@@ -86,8 +86,8 @@ const createBook = async function (req, res) {
         }
 
         if (!req.body.subcategory) {
-                // return res.status(400).send({status:false,message:"Please provide subcategory of the book"})
-                text = (text.length == 0) ? "Please provide subcategory of the book" : text + " ; " + "Please provide subcategory of the book"
+            // return res.status(400).send({status:false,message:"Please provide subcategory of the book"})
+            text = (text.length == 0) ? "Please provide subcategory of the book" : text + " ; " + "Please provide subcategory of the book"
         } else {
             req.body.subcategory = req.body.subcategory.trim()
             if (!(/^[a-zA-z ]{4,30}$/).test(req.body.subcategory)) {
@@ -97,8 +97,8 @@ const createBook = async function (req, res) {
         }
 
         if (!req.body.releasedAt) {
-                // return res.status(400).send({status:false,message:"Please provide releasedAt"})
-                text = (text.length == 0) ? "Please provide releasedAt" : text + " ; " + "Please provide releasedAt"
+            // return res.status(400).send({status:false,message:"Please provide releasedAt"})
+            text = (text.length == 0) ? "Please provide releasedAt" : text + " ; " + "Please provide releasedAt"
         } else {
             if (!(/^[12]{1}[0-9]{3}([\-])(0[1-9]|1[0-2])([\-])(0[1-9]|[12]\d|3[01])$/).test(req.body.releasedAt)) {
                 // return res.status(400).send({status:false,message:"Please provide valid date in format YYYY-MM-DD"})
@@ -107,12 +107,12 @@ const createBook = async function (req, res) {
                 req.body.releasedAt = req.body.releasedAt.trim()
                 let date = moment(req.body.releasedAt)
                 if (!date.isValid()) {
-                // return res.status(400).send({status:false,message:"please provide valid date on releasedAt "})
-                text = (text.length == 0) ? "please provide valid date on releasedAt " : text + " ; " + "please provide valid date on releasedAt "
+                    // return res.status(400).send({status:false,message:"please provide valid date on releasedAt "})
+                    text = (text.length == 0) ? "please provide valid date on releasedAt " : text + " ; " + "please provide valid date on releasedAt "
                 } else {
                     if (date > Date.now()) {
-                // return res.status(400).send({status:false,message:"please provide past date on releasedAt "})
-                text = (text.length == 0) ? "please provide past date on releasedAt " : text + " ; " + "please provide past date on releasedAt "
+                        // return res.status(400).send({status:false,message:"please provide past date on releasedAt "})
+                        text = (text.length == 0) ? "please provide past date on releasedAt " : text + " ; " + "please provide past date on releasedAt "
                     }
                 }
             }
@@ -137,10 +137,12 @@ const getBookByQuery = async function (req, res) {
         let data = req.query;
         let { userId, category, subcategory } = data
         let bookData = { isDeleted: false }
+        let sortedBooks;
 
         if (Object.keys(data).length == 0) {
-            let getBooks = await bookModel.find(bookData).select({ _id: 1, title: 1, excerpt: 1, userId: 1, category: 1, reviews: 1, releasedAt: 1, }).sort({ title: 1 })
-            return res.status(200).send({ status: true, message: 'Books list', data: getBooks })
+            let getBooks = await bookModel.find(bookData).select({ _id: 1, title: 1, excerpt: 1, userId: 1, category: 1, reviews: 1, releasedAt: 1, })
+            sortedBooks = getBooks.sort((a, b) => a.title.localeCompare(b.title))
+            return res.status(200).send({ status: true, message: 'Books list', data: sortedBooks })
         }
 
         if (userId) {
@@ -156,9 +158,13 @@ const getBookByQuery = async function (req, res) {
         }
 
         let books = await bookModel.find(bookData).select({ _id: 1, title: 1, excerpt: 1, userId: 1, category: 1, subcategory: 1, reviews: 1, releasedAt: 1, }).sort({ title: 1 })
-
-        if (books.length == 0) return res.status(404).send({ status: false, message: "No data found" })
-        else return res.status(200).send({ status: true, message: 'Books list', data: books })
+        if (books.length == 0) {
+            return res.status(404).send({ status: false, message: "No data found" })
+        }
+        else {
+            sortedBooks = books.sort((a, b) => a.title.localeCompare(b.title))
+            return res.status(200).send({ status: true, message: 'Books list', data: sortedBooks })
+        }
 
     }
     catch (err) {
@@ -184,7 +190,7 @@ const getBookById = async function (req, res) {
         bookDetails = { _id: saveData._id, title: saveData.title, excerpt: saveData.excerpt, userId: saveData.userId, category: saveData.category, subcategory: saveData.subcategory, isDeleted: saveData.isDeleted, reviews: saveData.reviews, reviewsData: data }
         // bookDetails = {...saveData, reviewsData: data }
 
-       return res.status(200).send({ status: true, message: "Book List", data: bookDetails })
+        return res.status(200).send({ status: true, message: "Book List", data: bookDetails })
     } catch (err) {
         return res.status(500).send({ message: 'Error', error: err.message })
     }
@@ -198,6 +204,7 @@ const updateBook = async function (req, res) {
 
         let ID = req.params.bookId
         let text = ''
+        let update = {}
         if (!req.body.title) {
         } else {
             req.body.title = req.body.title.trim()
@@ -207,10 +214,11 @@ const updateBook = async function (req, res) {
             } else {
                 let title = await bookModel.findOne({ title: req.body.title })
                 if (title) {
-                // return res.status(400).send({status:false,message:"Title is already present, Title must be unique."})
-                text = "Title is already present, Title must be unique."
+                    // return res.status(400).send({status:false,message:"Title is already present, Title must be unique."})
+                    text = "Title is already present, Title must be unique."
                 }
             }
+            update.title = req.body.title
         }
 
         if (!req.body.excerpt) {
@@ -220,6 +228,7 @@ const updateBook = async function (req, res) {
                 // return res.status(400).send({status:false,message:"Excerpt must consist of only letters"})
                 text = (text.length == 0) ? "Excerpt must consist of only letters" : text + " ; " + "Excerpt must consist of only letters"
             }
+            update.excerpt = req.body.excerpt
         }
 
         if (!req.body.releasedAt) {
@@ -232,17 +241,18 @@ const updateBook = async function (req, res) {
                 let date = moment(req.body.releasedAt)
                 // console.log(date);
                 if (!date.isValid()) {
-                // return res.status(400).send({status:false,message: "please provide valid date on releasedAt "})
-                text = (text.length == 0) ? "please provide valid date on releasedAt " : text + " ; " + "please provide valid date on releasedAt "
+                    // return res.status(400).send({status:false,message: "please provide valid date on releasedAt "})
+                    text = (text.length == 0) ? "please provide valid date on releasedAt " : text + " ; " + "please provide valid date on releasedAt "
                 } else {
                     if (date > Date.now()) {
-                // return res.status(400).send({status:false,message:"please provide past date on releasedAt " })
-                text = (text.length == 0) ? "please provide past date on releasedAt " : text + " ; " + "please provide past date on releasedAt "
+                        // return res.status(400).send({status:false,message:"please provide past date on releasedAt " })
+                        text = (text.length == 0) ? "please provide past date on releasedAt " : text + " ; " + "please provide past date on releasedAt "
                     }
                     // req.body.releasedAt=date.format("DD-MM-YYYY")
                     // console.log(req.body.releasedAt)
                 }
             }
+            update.releasedAt = req.body.releasedAt
         }
 
         if (!req.body.ISBN) {
@@ -254,17 +264,18 @@ const updateBook = async function (req, res) {
             } else {
                 let ISBN = await bookModel.findOne({ ISBN: req.body.ISBN });
                 if (ISBN) {
-                // return res.status(400).send({status:false,message:"Please provide unique ISBN number"})
-                text = (text.length == 0) ? "Please provide unique ISBN number" : text + " ; " + "Please provide unique ISBN number"
+                    // return res.status(400).send({status:false,message:"Please provide unique ISBN number"})
+                    text = (text.length == 0) ? "Please provide unique ISBN number" : text + " ; " + "Please provide unique ISBN number"
                 }
             }
+            update.ISBN = req.body.ISBN
         }
 
         if (text) {
             return res.status(400).send({ status: false, message: text });
         }
 
-        let updatedData = await bookModel.findOneAndUpdate({ _id: ID, isDeleted: false }, req.body, { new: true });
+        let updatedData = await bookModel.findOneAndUpdate({ _id: ID, isDeleted: false }, update, { new: true });
         if (!updatedData) {
             return res.status(404).send({ status: false, message: "No book found" });
         }
