@@ -24,7 +24,7 @@ router.delete('/books/:bookId/review/:reviewId',reviewController.deleteReview)
 
 
 router.all('/*', function (req, res) {
-    res.status(400).send({status:"false",message:"Route not fond"});
+    res.status(404).send({status:"false",message:"Route not fond"});
 });
 
 

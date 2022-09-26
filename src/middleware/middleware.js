@@ -3,19 +3,16 @@ const bookModel = require("../models/bookModel")
 const mongoose = require('mongoose')
 let ObjectID = mongoose.Types.ObjectId
 
-
-
-
 const authenticate = function (req, res, next) {
     try {
 
-        let token = req.headers["x-api-key" || "X-Api-Key"]
+        let token = req.headers["x-api-key"]
         if (!token) {
             return res.status(400).send({ status: false, message: "no token found" })
         }
         jwt.verify(token, "This is our Secret", function (err, decodedToken) {
             if (err) {
-                return res.status(400).send({ status: false, message: err.message })
+                return res.status(401).send({ status: false, message: err.message })
             }
             req.decodedToken = decodedToken
             console.log(decodedToken)
@@ -40,14 +37,14 @@ const authorization = async (req, res, next) => {
                 let bookId = req.params.bookId
 
                 if (!ObjectID.isValid(bookId)) { return res.status(401).send({ status: false, message: "Not a valid BookID" }) }
-                let book = await bookModel.findOne({_id:bookId,isDeleted:false})
+                let book = await bookModel.findOne({ _id: bookId, isDeleted: false })
                 if (!book) { return res.status(404).send({ status: false, message: "No such book exists" }) }
 
                 if (book.userId != req.decodedToken.userId) {
                     return res.status(403).send({ status: false, message: "You are not a authorized user" })
                 }
                 next()
-            }else{
+            } else {
                 return res.status(400).send({ status: false, message: "Please provide bookId" })
             }
         }
@@ -55,11 +52,15 @@ const authorization = async (req, res, next) => {
         if (req.route.path == "/books" && req.method == 'POST') {
             if (!Object.keys(req.body).length == 0) {
                 if (req.body.userId) {
-                    if (req.body.userId != req.decodedToken.userId) {
-                        return res.status(403).send({ status: false, message: "You are not a authorized user" })
+                    if (ObjectID.isValid(req.body.userId)) {
+                        if (req.body.userId != req.decodedToken.userId) {
+                            return res.status(403).send({ status: false, message: "You are not a authorized user" })
+                        }
+                    }else{
+                        return res.status(400).send({ status: false, message: "Please provide valid userId" })
                     }
                     next()
-                }else{
+                } else {
                     return res.status(403).send({ status: false, message: "Please provide userId for Authorization" })
                 }
             } else {
