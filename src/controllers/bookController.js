@@ -2,6 +2,7 @@
 const bookModel = require('../models/bookModel')
 const userModel = require('../models/userModel.js')
 const Validator = require("../validation/validfun")
+const reviewModel=require('../models/reviewModel.js')
 let mongoose = require("mongoose")
 let moment = require("moment")
 
@@ -157,16 +158,17 @@ const getBookById = async function (req, res) {
         var isValidId = mongoose.Types.ObjectId.isValid(bookId)
         if (!isValidId) return res.status(400).send({ status: false, message: "Enter valid book id" })
 
-        let saveData = await bookModel.findById({ _id: bookId, isDeleted: false })
+        let saveData = await bookModel.findOne({ _id: bookId, isDeleted: false }).select({_id:1,title:1,excerpt:1,userId:1,category:1,subcategory:1,isDeleted:1,reviews:1})
         if (!saveData) { return res.status(404).send({ status: false, message: "book not found" }) }
 
 
-        let data = await reviewModel.find({ bookId: bookId })
+        let data = await reviewModel.find({ bookId: bookId,isDeleted:false })
+        // console.log(saveData)
 
-        let book = saveData
-         bookDetails = { ...book, reviewsData: data }
+        bookDetails = {_id:saveData._id,title:saveData.title,excerpt:saveData.excerpt,userId:saveData.userId,category:saveData.category,subcategory:saveData.subcategory,isDeleted:saveData.isDeleted,reviews:saveData.reviews, reviewsData: data }
+        // bookDetails = {...saveData, reviewsData: data }
 
-        res.status(200).send({ ststus: true, message: "Book List", data: book })
+        res.status(200).send({ status: true, message: "Book List", data: bookDetails})
     } catch (err) {
         res.status(500).send({ message: 'Error', error: err.message })
     }
