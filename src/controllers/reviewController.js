@@ -152,10 +152,6 @@ const updateReview = async (req, res) => {
             updateQuery.review = review
         }
 
-<<<<<<< HEAD
-        dataToUpdate.reviewedAt = Date.now()
-=======
->>>>>>> f03e190ad72c90a9e201da94a082ed2ccc0ec09d
 
         await reviewModel.findOneAndUpdate({ _id: reviewID, isDeleted: false }, { $set: updateQuery }, { new: true })
         let allrev = await reviewModel.find({ bookId: bookId, isDeleted: false })
