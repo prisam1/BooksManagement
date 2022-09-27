@@ -24,7 +24,7 @@ const validateEmail = (email) => {
     return (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email));
 }
 const validateMobileNo = (number) => {
-    return (/^[0-9]{10}$/.test(number))
+    return (/^[6789][0-9]{9}$/.test(number))
     
 }
 const validPassword=(password)=>{

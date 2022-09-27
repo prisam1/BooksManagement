@@ -13,7 +13,7 @@ router.post('/books',middleware.authenticate,middleware.authorization,bookContro
 router.get('/books',middleware.authenticate,bookController.getBookByQuery)
 router.get('/books/:bookId',middleware.authenticate,bookController.getBookById)
 router.put('/books/:bookId',middleware.authenticate,middleware.authorization,bookController.updateBook)
-router.delete('g',middleware.authenticate,middleware.authorization,bookController.deleteBook)
+router.delete('/books/:bookId',middleware.authenticate,middleware.authorization,bookController.deleteBook)
 
 router.post('/books/:bookId/review',reviewController.createReview)
 router.put('/books/:bookId/review/:reviewId',reviewController.updateReview)

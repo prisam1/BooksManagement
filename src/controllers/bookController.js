@@ -17,10 +17,10 @@ const createBook = async function (req, res) {
             // return res.status(400).send({status:false,message:"Please provide title of the book"})
             text = "Please provide title of the book"
         } else {
-            req.body.title = req.body.title.trim()
-            if (!(/^[a-zA-z !&?]{2,100}$/).test(req.body.title)) {
-                // return res.status(400).send({status:false,message:"Title must consist of only letters"})
-                text = "Title must consist of only letters"
+
+            if (!(/^[a-zA-z0-9 !&?]{2,100}$/).test(req.body.title)) {
+                // return res.status(400).send({status:false,message:"Title must be a valid title"})
+                text = "Title must be a valid title"
             } else {
                 let title = await bookModel.findOne({ title: req.body.title })
                 if (title) {
@@ -34,7 +34,7 @@ const createBook = async function (req, res) {
             // return res.status(400).send({status:false,message:"Please provide excerpt of the book"})
             text = (text.length == 0) ? "Please provide excerpt of the book" : text + " ; " + "Please provide excerpt of the book"
         } else {
-            req.body.excerpt = req.body.excerpt.trim()
+
             if (!(/^[a-zA-z !&?]{2,100}$/).test(req.body.excerpt)) {
                 // return res.status(400).send({status:false,message:"Excerpt must consist of only letters"})
                 text = (text.length == 0) ? "Excerpt must consist of only letters" : text + " ; " + "Excerpt must consist of only letters"
@@ -61,16 +61,16 @@ const createBook = async function (req, res) {
             // return res.status(400).send({status:false,message:"Please provide ISBN number of the book"})
             text = (text.length == 0) ? "Please provide ISBN number of the book" : text + " ; " + "Please provide ISBN number of the book"
         } else {
-            req.body.ISBN = req.body.ISBN.trim()
+
             if (!(/^[0-9]{3}([\-])[0-9]{10}$/).test(req.body.ISBN)) {
                 // return res.status(400).send({status:false,message:"Please provide valid 13 digit valid ISBN number"})
                 text = (text.length == 0) ? "Please provide valid 13 digit valid ISBN number" : text + " ; " + "Please provide valid 13 digit valid ISBN number"
-            } else {
-                let ISBN = await bookModel.findOne({ ISBN: req.body.ISBN });
-                if (ISBN) {
+          //  } //else {
+             //   let ISBN = await bookModel.findOne({ ISBN: req.body.ISBN });
+             //   if (!ISBN) {
                     // return res.status(400).send({status:false,message:"Please provide unique ISBN number"})
-                    text = (text.length == 0) ? "Please provide unique ISBN number" : text + " ; " + "Please provide unique ISBN number"
-                }
+               //     text = (text.length == 0) ? "Please provide unique ISBN number" : text + " ; " + "Please provide unique ISBN number"
+             //   }
             }
         }
 
@@ -78,7 +78,7 @@ const createBook = async function (req, res) {
             // return res.status(400).send({status:false,message:"Please provide category of the book"})
             text = (text.length == 0) ? "Please provide category of the book" : text + " ; " + "Please provide category of the book"
         } else {
-            req.body.category = req.body.category.trim()
+
             if (!(/^[a-zA-z ]{4,30}$/).test(req.body.category)) {
                 // return res.status(400).send({status:false,message: "Category can contain only letters" })
                 text = (text.length == 0) ? "Category can contain only letters" : text + " ; " + "Category can contain only letters"
@@ -89,7 +89,7 @@ const createBook = async function (req, res) {
             // return res.status(400).send({status:false,message:"Please provide subcategory of the book"})
             text = (text.length == 0) ? "Please provide subcategory of the book" : text + " ; " + "Please provide subcategory of the book"
         } else {
-            req.body.subcategory = req.body.subcategory.trim()
+
             if (!(/^[a-zA-z ]{4,30}$/).test(req.body.subcategory)) {
                 // return res.status(400).send({status:false,message:`${req.body.subcategory} is not a valid subcategory`})
                 text = (text.length == 0) ? `${req.body.subcategory} is not a valid subcategory` : text + " ; " + `${req.body.subcategory} is not a valid subcategory`
@@ -157,7 +157,7 @@ const getBookByQuery = async function (req, res) {
             bookData.subcategory = subcategory
         }
 
-        let books = await bookModel.find(bookData).select({ _id: 1, title: 1, excerpt: 1, userId: 1, category: 1, subcategory: 1, reviews: 1, releasedAt: 1, }).sort({ title: 1 })
+        let books = await bookModel.find(bookData).select({ _id: 1, title: 1, excerpt: 1, userId: 1, category: 1, subcategory: 1, reviews: 1, releasedAt: 1, })
         if (books.length == 0) {
             return res.status(404).send({ status: false, message: "No data found" })
         }
@@ -187,7 +187,17 @@ const getBookById = async function (req, res) {
         let data = await reviewModel.find({ bookId: bookId, isDeleted: false })
         // console.log(saveData)
 
-        bookDetails = { _id: saveData._id, title: saveData.title, excerpt: saveData.excerpt, userId: saveData.userId, category: saveData.category, subcategory: saveData.subcategory, isDeleted: saveData.isDeleted, reviews: saveData.reviews, reviewsData: data }
+        bookDetails = {
+            _id: saveData._id,
+            title: saveData.title,
+            excerpt: saveData.excerpt,
+            userId: saveData.userId,
+            category: saveData.category,
+            subcategory: saveData.subcategory,
+            isDeleted: saveData.isDeleted,
+            reviews: saveData.reviews,
+            reviewsData: data
+        }
         // bookDetails = {...saveData, reviewsData: data }
 
         return res.status(200).send({ status: true, message: "Book List", data: bookDetails })
@@ -208,9 +218,9 @@ const updateBook = async function (req, res) {
         if (!req.body.title) {
         } else {
             req.body.title = req.body.title.trim()
-            if (!(/^[a-zA-z !&?]{2,50}$/).test(req.body.title)) {
-                // return res.status(400).send({status:false,message:"Title must consist of only letters"})
-                text = "Title must consist of only letters"
+            if (!(/^[a-zA-z0-9 !&?]{2,50}$/).test(req.body.title)) {
+                // return res.status(400).send({status:false,message:"Title must be a valid title"})
+                text = "Title must be a valid title"
             } else {
                 let title = await bookModel.findOne({ title: req.body.title })
                 if (title) {

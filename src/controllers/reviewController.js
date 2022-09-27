@@ -63,7 +63,7 @@ const createReview = async function (req, res) {
         }
 
         details.bookId = bookId
-       let reviewdata = await reviewModel.create(details) 
+        let reviewdata = await reviewModel.create(details) 
 
         let saveData = await booksModel.findOneAndUpdate({ _id: bookId }, { $inc: { reviews: +1 } }, { new: true })
         bookDetails = {
@@ -217,7 +217,7 @@ const deleteReview = async (req, res) => {
 
         let deletedReview = await reviewModel.findOneAndUpdate({ _id: reviewId, isDeleted: false }, { isDeleted: true })
         if (deletedReview) {
-            let updateBook = await bookModel.findOneAndUpdate({ _id: bookId }, { $inc: { reviews: -1 } })
+            await bookModel.findOneAndUpdate({ _id: bookId }, { $inc: { reviews: -1 } })
         }
         return res.status(200).send({ status: true, message: "REVIEW SUCCESSFULLY DELETED", })
     } catch (err) {
