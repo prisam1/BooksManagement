@@ -18,8 +18,8 @@ const createBook = async function (req, res) {
             text = "Please provide title of the book"
         } else {
 
-            if (!(/^[a-zA-z !&?]{2,100}$/).test(req.body.title)) {
-                // return res.status(400).send({status:false,message:"Title must consist of only letters"})
+            if (!(/^[a-zA-z0-9 !&?]{2,100}$/).test(req.body.title)) {
+                // return res.status(400).send({status:false,message:"Title must be a valid title"})
                 text = "Title must consist of only letters"
             } else {
                 let title = await bookModel.findOne({ title: req.body.title })
@@ -218,8 +218,8 @@ const updateBook = async function (req, res) {
         if (!req.body.title) {
         } else {
             req.body.title = req.body.title.trim()
-            if (!(/^[a-zA-z !&?]{2,50}$/).test(req.body.title)) {
-                // return res.status(400).send({status:false,message:"Title must consist of only letters"})
+            if (!(/^[a-zA-z0-9 !&?]{2,50}$/).test(req.body.title)) {
+                // return res.status(400).send({status:false,message:"Title must be a valid title"})
                 text = "Title must consist of only letters"
             } else {
                 let title = await bookModel.findOne({ title: req.body.title })

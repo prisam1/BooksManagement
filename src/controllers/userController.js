@@ -159,7 +159,7 @@ const login = async function (req, res) {
         }, "This is our Secret", {
             expiresIn: '1hr'
         });
-        return res.status(200).send({ status: true, message: "Success", data: { token: token } })
+        return res.status(201).send({ status: true, message: "Success", data: { token: token } })
     }
     catch (err) {
         return res.status(401).send({ status: false, message: err.message })
